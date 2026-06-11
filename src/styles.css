@@ -488,6 +488,24 @@ tbody th {
   color: var(--green);
 }
 
+.table-button {
+  min-height: 38px;
+  padding: 8px 12px;
+  background: #eefbf5;
+  color: #116b4c;
+  border-color: #b9ead5;
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.affiliate-note {
+  max-width: 920px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
 .lead-section {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 450px);
@@ -518,6 +536,23 @@ tbody th {
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
+}
+
+.lead-form input[type="text"],
+.lead-form select,
+.lead-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: #22334a;
+}
+
+.lead-form textarea {
+  min-height: 130px;
+  resize: vertical;
 }
 
 .check-row {
@@ -595,6 +630,146 @@ summary {
   text-decoration: none;
 }
 
+.app-page {
+  min-height: 64vh;
+  background: linear-gradient(180deg, #ffffff, #f5f7fb);
+}
+
+.app-page h1 {
+  max-width: 980px;
+  color: var(--navy);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.08;
+}
+
+.page-shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.two-column-page {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.page-intro {
+  max-width: 780px;
+  color: #40536d;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.content-card,
+.resource-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.content-card {
+  margin-top: 24px;
+  padding: clamp(20px, 4vw, 32px);
+}
+
+.content-card h2 {
+  margin-top: 24px;
+  font-size: 1.25rem;
+}
+
+.content-card h2:first-child {
+  margin-top: 0;
+}
+
+.content-card p,
+.content-card li {
+  color: #40536d;
+  line-height: 1.7;
+}
+
+.updated-note,
+.privacy-note,
+.affiliate-placeholder {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.affiliate-placeholder {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px dashed #b7c6d9;
+  border-radius: 8px;
+  background: #f8fbff;
+  font-weight: 800;
+}
+
+.route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.resource-card {
+  display: block;
+  padding: 20px;
+  text-decoration: none;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-2px);
+  border-color: #9edbbf;
+}
+
+.resource-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+.resource-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.cookie-banner {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  width: min(760px, calc(100vw - 36px));
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.cookie-banner p {
+  margin: 0;
+  color: #40536d;
+  line-height: 1.55;
+}
+
+.cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .footer {
   display: flex;
   justify-content: space-between;
@@ -609,6 +784,18 @@ summary {
   color: #c9d8eb;
 }
 
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px 16px;
+  max-width: 560px;
+}
+
+.footer-links a {
+  color: white;
+}
+
 :focus-visible {
   outline: 3px solid #f5b45d;
   outline-offset: 3px;
@@ -618,6 +805,8 @@ summary {
   .site-header,
   .hero,
   .lead-section,
+  .two-column-page,
+  .cookie-banner,
   .footer {
     grid-template-columns: 1fr;
   }
@@ -642,6 +831,14 @@ summary {
 
   .footer {
     display: grid;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+
+  .cookie-actions {
+    align-items: stretch;
   }
 }
 
@@ -678,6 +875,7 @@ summary {
   .site-header,
   header,
   nav,
+  .cookie-banner,
   .hero,
   .section:not(.quiz-section),
   .footer,

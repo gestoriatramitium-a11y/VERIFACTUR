@@ -1,12 +1,24 @@
 import { comparatorItems } from "../data/resources";
 
-export default function Comparator() {
+type ComparatorProps = {
+  compact?: boolean;
+  fullPage?: boolean;
+};
+
+export default function Comparator({ compact = false, fullPage = false }: ComparatorProps) {
   return (
     <section className="section" id="comparador">
       <div className="section-heading">
         <p className="eyebrow">Compara opciones antes de contratar</p>
-        <h2>Comparador de soluciones</h2>
-        <p>Estas categorías son genéricas. Antes de elegir, revisa que la herramienta encaja con tu actividad y obligaciones.</p>
+        {fullPage ? (
+          <h1>Comparador de soluciones para facturación, VERI*FACTU y gestión digital</h1>
+        ) : (
+          <h2>Comparador de soluciones</h2>
+        )}
+        <p>
+          Compara opciones para factura electrónica, programa de facturación, gestoría online, asesoría fiscal y registro horario digital.
+          Estas categorías son genéricas: antes de elegir, revisa que la herramienta encaja con tu actividad y obligaciones.
+        </p>
       </div>
 
       <div className="sponsor-strip">
@@ -20,12 +32,13 @@ export default function Comparator() {
         <table>
           <thead>
             <tr>
-              <th>Solución</th>
+              <th>Opción</th>
               <th>Ideal para</th>
               <th>Ventajas</th>
               <th>Limitaciones</th>
-              <th>Precio estimado</th>
+              <th>Precio orientativo</th>
               <th>Dificultad</th>
+              {!compact ? <th>Recomendado para</th> : null}
               <th>CTA</th>
             </tr>
           </thead>
@@ -38,8 +51,9 @@ export default function Comparator() {
                 <td>{item.limitations}</td>
                 <td>{item.price}</td>
                 <td>{item.difficulty}</td>
+                {!compact ? <td>{item.recommendedFor}</td> : null}
                 <td>
-                  <a className="text-link" href={item.href}>
+                  <a className="button table-button" href={item.href}>
                     {item.cta}
                   </a>
                 </td>
@@ -48,6 +62,10 @@ export default function Comparator() {
           </tbody>
         </table>
       </div>
+
+      <p className="affiliate-note">
+        Algunos enlaces podrán ser enlaces de afiliado en el futuro. Esto no cambia el precio para el usuario y ayuda a mantener la herramienta.
+      </p>
     </section>
   );
 }
