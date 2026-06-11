@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Web app informativa para orientar a autonomos y pymes sobre VERI*FACTU, factura electronica y registro horario digital.",
+  "description": "Web app informativa para orientar a autónomos y pymes sobre VERI*FACTU, factura electrónica y registro horario digital.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
