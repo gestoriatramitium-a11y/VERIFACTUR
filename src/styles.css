@@ -691,7 +691,8 @@ summary {
 
 .updated-note,
 .privacy-note,
-.affiliate-placeholder {
+.affiliate-placeholder,
+.go-note {
   color: var(--muted);
   line-height: 1.6;
 }
@@ -710,6 +711,53 @@ summary {
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 24px;
+}
+
+.go-note {
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+.related-options {
+  margin-top: clamp(28px, 5vw, 46px);
+}
+
+.related-options h2 {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.related-card {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-height: 210px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  box-shadow: var(--shadow);
+}
+
+.related-card h3 {
+  margin-bottom: 0;
+  font-size: 1.12rem;
+}
+
+.related-card p {
+  margin: 0;
+  color: #40536d;
+  line-height: 1.55;
+}
+
+.related-card .button {
+  align-self: end;
 }
 
 .resource-grid {
@@ -768,6 +816,10 @@ summary {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.cookie-actions .button {
+  box-shadow: none;
 }
 
 .footer {
@@ -840,6 +892,10 @@ summary {
   .cookie-actions {
     align-items: stretch;
   }
+
+  .related-card {
+    min-height: auto;
+  }
 }
 
 @media (max-width: 560px) {
@@ -853,6 +909,28 @@ summary {
 
   .button {
     width: 100%;
+  }
+
+  .cookie-banner {
+    right: 10px;
+    bottom: 10px;
+    width: calc(100vw - 20px);
+    max-height: 34vh;
+    overflow: auto;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .cookie-banner p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .cookie-actions .button {
+    width: auto;
+    flex: 1 1 130px;
+    min-height: 40px;
+    padding: 9px 12px;
   }
 
   .hero-actions,
