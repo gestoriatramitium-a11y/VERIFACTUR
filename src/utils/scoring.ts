@@ -10,6 +10,8 @@ export type DiagnosticResult = {
   advisorSummary: string;
 };
 
+const MANY_INVOICES = ["21_50", "50_plus"];
+
 const answerLabels: Record<string, string> = {
   autonomo: "Autónomo",
   sociedad: "Sociedad o pyme",
@@ -28,7 +30,7 @@ const answerLabels: Record<string, string> = {
   mezcla: "Mezcla",
   "0_5": "0-5",
   "6_20": "6-20",
-  "21_50": "21-50",
+  "21_50": "21 a 50",
   "50_plus": "Más de 50",
   si: "Sí",
   no: "No",
@@ -72,7 +74,7 @@ export function calculateResult(answers: Answers): DiagnosticResult {
   if (answers.hasEmployees === "si") {
     score += 2;
     risks.add("Al tener empleados, el registro horario digital es un punto laboral relevante a revisar.");
-    nextSteps.add("Comprueba si tu registro de jornada permite conservar, consultar y justificar los datos.");
+    nextSteps.add("Revisa siempre el registro horario digital: conservación, consulta, trazabilidad y acceso a los datos.");
   }
 
   if (answers.hasEmployees === "si" && answers.timeTracking === "no") {
@@ -89,13 +91,20 @@ export function calculateResult(answers: Answers): DiagnosticResult {
     nextSteps.add("Solicita una revisión a una gestoría online o asesoría tradicional.");
   }
 
-  if (answers.mainConcern === "precio" && ["0_5", "6_20"].includes(answers.monthlyInvoices ?? "")) {
+  if (
+    answers.mainConcern === "precio" &&
+    ["0_5", "6_20"].includes(answers.monthlyInvoices ?? "") &&
+    answers.hasEmployees !== "si" &&
+    !["empresas", "administracion", "mezcla"].includes(answers.customerType ?? "") &&
+    score < 8
+  ) {
     nextSteps.add("Empieza comparando una opción básica o económica, sin descartar consulta profesional.");
   }
 
   nextSteps.add("Guarda este resultado y compártelo con tu gestoría antes de decidir.");
 
-  const urgency = score >= 8 ? "Alto" : score >= 4 ? "Medio" : "Bajo";
+  const hasComplexBusiness = answers.hasEmployees === "si" && MANY_INVOICES.includes(answers.monthlyInvoices ?? "");
+  const urgency = score >= 8 || hasComplexBusiness ? "Alto" : score >= 4 ? "Medio" : "Bajo";
   const profile = detectProfile(answers);
   const recommendation = buildRecommendation(answers, urgency);
   const advisorSummary = buildAdvisorSummary(answers, urgency, profile, Array.from(risks));
@@ -114,7 +123,7 @@ export function calculateResult(answers: Answers): DiagnosticResult {
 function detectProfile(answers: Answers) {
   if (answers.hasEmployees === "si") return "Empresa con empleados";
   if (answers.invoiceMethod === "gestoria") return "Profesional que depende de gestoría";
-  if (answers.businessType === "comercio" && ["6_20", "21_50", "50_plus"].includes(answers.monthlyInvoices ?? "")) {
+  if (answers.businessType === "comercio" && ["6_20", ...MANY_INVOICES].includes(answers.monthlyInvoices ?? "")) {
     return "Comercio con volumen medio";
   }
   if (["autonomo", "freelance"].includes(answers.businessType ?? "") && answers.monthlyInvoices === "0_5") {
@@ -125,40 +134,56 @@ function detectProfile(answers: Answers) {
 }
 
 function buildRecommendation(answers: Answers, urgency: DiagnosticResult["urgency"]) {
-  if (answers.preferredSolution === "gestionada" || answers.mainConcern === "delegar") {
-    return "Tu mejor primer paso puede ser pedir una revisión a una gestoría o asesoría y comparar una opción gestionada.";
+  const hasEmployees = answers.hasEmployees === "si";
+  const hasManyInvoices = MANY_INVOICES.includes(answers.monthlyInvoices ?? "");
+  const invoicesCompaniesOrPublic = ["empresas", "administracion", "mezcla"].includes(answers.customerType ?? "");
+
+  if (hasEmployees) {
+    if (urgency === "Alto" || hasManyInvoices || invoicesCompaniesOrPublic) {
+      const reason = hasManyInvoices
+        ? "Al tener empleados y un volumen medio de facturas, una solución básica podría quedarse corta."
+        : "Al tener empleados, una solución básica podría quedarse corta para revisar correctamente el registro horario digital.";
+      return `Por tu perfil, conviene revisar una solución profesional o una asesoría/gestoría que pueda ayudarte con facturación, factura electrónica y registro horario digital. ${reason}`;
+    }
+    return "Por tener empleados, conviene revisar una solución profesional o una asesoría/gestoría que pueda ayudarte con facturación y registro horario digital.";
   }
-  if (answers.preferredSolution === "gratuita" || answers.preferredSolution === "economica") {
-    return "Revisa una solución básica o económica, especialmente si emites pocas facturas, y valida con tu asesoría que cubre tu caso.";
+
+  if (invoicesCompaniesOrPublic) {
+    return "Conviene revisar factura electrónica y valorar software profesional o una asesoría que confirme qué requisitos aplican a tus clientes y a tu actividad.";
   }
-  if (urgency === "Alto") {
-    return "Conviene priorizar una revisión de tu sistema de facturación y registro, especialmente antes de que lleguen las prisas.";
+
+  if (urgency === "Alto" || hasManyInvoices) {
+    return "Conviene valorar un software profesional, una gestoría online o una asesoría tradicional que revise tu caso y te ayude a preparar la adaptación.";
   }
-  return "Tienes margen para informarte, comparar opciones y preparar una transición ordenada sin tecnicismos.";
+
+  if (urgency === "Medio") {
+    return "Conviene comparar un software económico de facturación o una gestoría online que te ayude a revisar tu situación.";
+  }
+
+  return "Puedes empezar revisando una opción básica o gratuita, pero valida tu caso con tu asesoría.";
 }
 
 function buildAdvisorSummary(answers: Answers, urgency: string, profile: string, risks: string[]) {
-  const lines = [
-    "Hola, he realizado un test orientativo en FacturaRadar y me gustaría revisar mi caso.",
-    `Perfil detectado: ${profile}.`,
-    `Nivel de urgencia orientativo: ${urgency}.`,
-    `Tipo de actividad: ${label(answers.businessType)}.`,
-    `Sistema actual de facturación: ${label(answers.invoiceMethod)}.`,
-    `Clientes principales: ${label(answers.customerType)}.`,
-    `Facturas mensuales: ${label(answers.monthlyInvoices)}.`,
-    `Empleados: ${label(answers.hasEmployees)}.`,
-    `Registro horario digital: ${label(answers.timeTracking)}.`,
-    `Preferencia de solución: ${label(answers.preferredSolution)}.`
-  ];
+  const lowerUrgency = urgency.toLowerCase();
+  const profileText = profile.toLowerCase();
+  const invoiceText = label(answers.monthlyInvoices).toLowerCase();
+  const customerText = customerSummary(answers.customerType);
+  const customerClause = customerText ? ` y clientes principalmente ${customerText}` : "";
+  const reviewFocus = answers.hasEmployees === "si" ? "facturación, factura electrónica y registro horario" : "facturación y factura electrónica";
+  const riskText = risks.length ? ` Los puntos detectados a revisar son: ${risks.join(" ")}` : "";
 
-  if (risks.length) {
-    lines.push(`Puntos a revisar: ${risks.join(" ")}`);
-  }
-
-  return lines.join("\n");
+  return `Hola, he realizado un test orientativo sobre VERI*FACTU, factura electrónica y registro horario. Mi resultado indica un nivel de urgencia ${lowerUrgency}. Mi perfil sería ${profileText}, con emisión aproximada de ${invoiceText} facturas mensuales${customerClause}. ¿Podrías revisar si mi sistema actual de ${reviewFocus} cumple con la normativa aplicable y qué cambios debería preparar?${riskText}`;
 }
 
 function label(value?: string) {
   if (!value) return "Sin responder";
   return answerLabels[value] ?? value;
+}
+
+function customerSummary(value?: string) {
+  if (value === "empresas") return "empresas";
+  if (value === "administracion") return "administración pública";
+  if (value === "mezcla") return "una mezcla de particulares, empresas o administración";
+  if (value === "particulares") return "particulares";
+  return "";
 }

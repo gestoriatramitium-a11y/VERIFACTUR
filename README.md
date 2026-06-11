@@ -1,8 +1,8 @@
 # FacturaRadar
 
-FacturaRadar es una web app informativa en espanol para orientar a autonomos, pequenas empresas, freelancers, comercios locales y asesorias sobre VERI*FACTU, factura electronica, sistemas de facturacion y registro horario digital.
+FacturaRadar es una web app informativa en español para orientar a autónomos, pequeñas empresas, freelancers, comercios locales y asesorías sobre VERI*FACTU, factura electrónica, sistemas de facturación y registro horario digital.
 
-No es una app de facturacion real ni un software fiscal certificado. El test ofrece una orientacion general para preparar una conversacion util con una gestoria o asesoria profesional.
+No es una app de facturación real ni un software fiscal certificado. El test ofrece una orientación general para preparar una conversación útil con una gestoría o asesoría profesional.
 
 ## Instalacion
 
@@ -28,10 +28,10 @@ El archivo `netlify.toml` ya incluye la configuracion basica para sitios estatic
 
 ## Monetizacion
 
-Los enlaces placeholder tipo `/go/software-economico`, `/go/gestoria-online` y `/go/programa-profesional` estan en `src/data/resources.ts`. Sustituyelos por enlaces de afiliado cuando los tengas.
+Los enlaces placeholder tipo `/go/software-economico`, `/go/gestoria-online` y `/go/programa-profesional` están en `src/data/resources.ts`. Sustitúyelos por enlaces de afiliado cuando los tengas.
 
 Los bloques de publicidad y comparativa patrocinada estan en `src/components/LeadMagnet.tsx` y `src/components/Comparator.tsx`, con comentarios en el codigo indicando donde insertar AdSense, afiliados o patrocinios.
 
 ## Aviso
 
-FacturaRadar no constituye asesoramiento fiscal, laboral, contable ni juridico. La normativa puede cambiar. Antes de tomar decisiones, consulta fuentes oficiales o una asesoria profesional.
+FacturaRadar no constituye asesoramiento fiscal, laboral, contable ni jurídico. La normativa puede cambiar. Antes de tomar decisiones, consulta fuentes oficiales o una asesoría profesional.

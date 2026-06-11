@@ -3,7 +3,7 @@ import { questions, type Answers } from "../data/questions";
 import { calculateResult, type DiagnosticResult } from "../utils/scoring";
 import ResultCard from "./ResultCard";
 
-const STORAGE_KEY = "factura-radar-last-result";
+const STORAGE_KEY = "factura-radar-last-result-v2";
 
 type StoredResult = {
   answers: Answers;
@@ -25,11 +25,18 @@ export default function DiagnosticQuiz() {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       try {
-        setStoredResult(JSON.parse(raw) as StoredResult);
+        const parsed = JSON.parse(raw) as StoredResult;
+        const refreshedResult = calculateResult(parsed.answers);
+        setStoredResult({
+          answers: parsed.answers,
+          result: refreshedResult,
+          savedAt: parsed.savedAt
+        });
       } catch {
         window.localStorage.removeItem(STORAGE_KEY);
       }
     }
+    window.localStorage.removeItem("factura-radar-last-result");
   }, []);
 
   const result = useMemo(() => (storedResult ? storedResult.result : null), [storedResult]);

@@ -414,16 +414,25 @@ li {
   line-height: 1.55;
 }
 
-.advisor-text {
-  width: 100%;
-  min-height: 170px;
+.advisor-summary {
   margin-top: 18px;
-  padding: 14px;
+  padding: 16px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  color: #22334a;
   background: #f8fafc;
-  resize: vertical;
+}
+
+.advisor-copy-text {
+  margin: 0;
+  color: #22334a;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.print-only,
+.print-summary,
+.print-legal {
+  display: none;
 }
 
 .sponsor-strip {
@@ -662,24 +671,159 @@ summary {
 }
 
 @media print {
+  @page {
+    margin: 14mm;
+  }
+
   .site-header,
+  header,
+  nav,
   .hero,
   .section:not(.quiz-section),
   .footer,
-  .result-actions {
+  .result-actions,
+  .no-print,
+  .screen-only,
+  .quiz-section .section-heading,
+  .quiz-card,
+  .sponsor-strip,
+  .table-wrap,
+  form,
+  textarea,
+  button {
     display: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 
   body {
     background: white;
+    color: #111827;
   }
 
   .quiz-section {
     padding: 0;
+    background: white;
+  }
+
+  .quiz-shell {
+    max-width: none;
   }
 
   .result-card {
+    padding: 0;
     border: 0;
     box-shadow: none;
+    color: #111827;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-summary,
+  .print-legal,
+  .print-only {
+    display: block;
+  }
+
+  .print-brand {
+    margin: 0 0 4px;
+    color: #0b1f3a;
+    font-size: 18pt;
+    font-weight: 900;
+  }
+
+  .print-date {
+    margin: 0 0 14px;
+    color: #4b5563;
+    font-size: 9.5pt;
+  }
+
+  .print-summary h2 {
+    margin: 0 0 14px;
+    color: #0b1f3a;
+    font-size: 20pt;
+  }
+
+  .result-topline {
+    margin-bottom: 12px;
+  }
+
+  .urgency-badge {
+    padding: 0;
+    background: transparent !important;
+    color: #111827;
+    font-size: 12pt;
+  }
+
+  .result-card h3 {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 14pt;
+  }
+
+  .recommendation {
+    margin: 0 0 14px;
+    color: #111827;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .result-grid h4 {
+    margin-bottom: 6px;
+    color: #111827;
+    font-size: 11pt;
+  }
+
+  .result-grid ul,
+  .result-grid ol {
+    margin-top: 0;
+    padding-left: 18px;
+  }
+
+  .result-grid li {
+    margin-bottom: 5px;
+    font-size: 9.5pt;
+    line-height: 1.35;
+  }
+
+  .advisor-summary {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    background: white;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .advisor-summary h4 {
+    margin: 0 0 6px;
+    color: #111827;
+    font-size: 11pt;
+  }
+
+  .advisor-copy-text {
+    color: #111827;
+    font-size: 9.5pt;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .print-legal {
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #d1d5db;
+    color: #4b5563;
+    font-size: 8.8pt;
+    line-height: 1.35;
   }
 }

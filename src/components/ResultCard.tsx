@@ -9,15 +9,26 @@ type ResultCardProps = {
 
 export default function ResultCard({ result, onRestart, onCopy, copied }: ResultCardProps) {
   const urgencyClass = result.urgency.toLowerCase();
+  const printedAt = new Date().toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
 
   return (
     <article className="result-card">
-      <div className="result-topline">
-        <span className={`urgency-badge ${urgencyClass}`}>Urgencia {result.urgency}</span>
-        <span className="score">Puntuación orientativa: {result.score}/14</span>
+      <div className="print-summary">
+        <p className="print-brand">FacturaRadar</p>
+        <p className="print-date">Fecha: {printedAt}</p>
+        <h2>Resultado del test</h2>
       </div>
 
-      <h3>{result.profile}</h3>
+      <div className="result-topline">
+        <span className={`urgency-badge ${urgencyClass}`}>Nivel de urgencia: {result.urgency}</span>
+        <span className="score screen-only">Puntuación orientativa: {result.score}/14</span>
+      </div>
+
+      <h3>Perfil detectado: {result.profile}</h3>
       <p className="recommendation">{result.recommendation}</p>
 
       <div className="result-grid">
@@ -41,9 +52,17 @@ export default function ResultCard({ result, onRestart, onCopy, copied }: Result
         </div>
       </div>
 
-      <textarea className="advisor-text" readOnly value={result.advisorSummary} aria-label="Resumen para enviar a tu gestoría" />
+      <div className="advisor-summary">
+        <h4>Texto para enviar a tu gestoría</h4>
+        <p className="advisor-copy-text">{result.advisorSummary}</p>
+      </div>
 
-      <div className="result-actions">
+      <p className="print-legal">
+        Aviso: este resultado es una orientación general y no constituye asesoramiento fiscal, laboral, contable ni jurídico. Consulta fuentes
+        oficiales o una asesoría profesional antes de tomar decisiones.
+      </p>
+
+      <div className="result-actions no-print">
         <button className="button button-primary" type="button" onClick={() => window.print()}>
           Imprimir o guardar PDF
         </button>
