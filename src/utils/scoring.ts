@@ -107,7 +107,7 @@ export function calculateResult(answers: Answers): DiagnosticResult {
   const urgency = score >= 8 || hasComplexBusiness ? "Alto" : score >= 4 ? "Medio" : "Bajo";
   const profile = detectProfile(answers);
   const recommendation = buildRecommendation(answers, urgency);
-  const advisorSummary = buildAdvisorSummary(answers, urgency, profile, Array.from(risks));
+  const advisorSummary = buildAdvisorSummary(answers, urgency, profile);
 
   return {
     urgency,
@@ -163,16 +163,15 @@ function buildRecommendation(answers: Answers, urgency: DiagnosticResult["urgenc
   return "Puedes empezar revisando una opción básica o gratuita, pero valida tu caso con tu asesoría.";
 }
 
-function buildAdvisorSummary(answers: Answers, urgency: string, profile: string, risks: string[]) {
+function buildAdvisorSummary(answers: Answers, urgency: string, profile: string) {
   const lowerUrgency = urgency.toLowerCase();
   const profileText = profile.toLowerCase();
-  const invoiceText = label(answers.monthlyInvoices).toLowerCase();
+  const invoiceText = monthlyInvoiceSummary(answers.monthlyInvoices);
   const customerText = customerSummary(answers.customerType);
   const customerClause = customerText ? ` y clientes principalmente ${customerText}` : "";
-  const reviewFocus = answers.hasEmployees === "si" ? "facturación, factura electrónica y registro horario" : "facturación y factura electrónica";
-  const riskText = risks.length ? ` Los puntos detectados a revisar son: ${risks.join(" ")}` : "";
+  const reviewFocus = answers.hasEmployees === "si" ? "facturación y registro horario" : "facturación y factura electrónica";
 
-  return `Hola, he realizado un test orientativo sobre VERI*FACTU, factura electrónica y registro horario. Mi resultado indica un nivel de urgencia ${lowerUrgency}. Mi perfil sería ${profileText}, con emisión aproximada de ${invoiceText} facturas mensuales${customerClause}. ¿Podrías revisar si mi sistema actual de ${reviewFocus} cumple con la normativa aplicable y qué cambios debería preparar?${riskText}`;
+  return `Hola, he realizado un test orientativo sobre VERI*FACTU, factura electrónica y registro horario. El resultado indica un nivel de urgencia ${lowerUrgency}. Mi perfil sería ${profileText}, con ${invoiceText} facturas mensuales${customerClause}. ¿Podrías revisar si mi sistema actual de ${reviewFocus} cumple con lo necesario y qué cambios debería preparar?`;
 }
 
 function label(value?: string) {
@@ -186,4 +185,12 @@ function customerSummary(value?: string) {
   if (value === "mezcla") return "una mezcla de particulares, empresas o administración";
   if (value === "particulares") return "particulares";
   return "";
+}
+
+function monthlyInvoiceSummary(value?: string) {
+  if (value === "0_5") return "hasta 5";
+  if (value === "6_20") return "entre 6 y 20";
+  if (value === "21_50") return "unas 21 a 50";
+  if (value === "50_plus") return "más de 50";
+  return "un volumen aproximado de";
 }

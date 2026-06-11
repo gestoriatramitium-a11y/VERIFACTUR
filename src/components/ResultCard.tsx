@@ -53,7 +53,7 @@ export default function ResultCard({ result, onRestart, onCopy, copied }: Result
       </div>
 
       <div className="advisor-summary">
-        <h4>Texto para enviar a tu gestoría</h4>
+        <h4>Resumen para compartir con tu gestoría</h4>
         <p className="advisor-copy-text">{result.advisorSummary}</p>
       </div>
 
