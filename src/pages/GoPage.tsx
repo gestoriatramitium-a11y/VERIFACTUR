@@ -65,8 +65,8 @@ export default function GoPage({ slug }: GoPageProps) {
             </div>
           ) : (
             <p className="affiliate-placeholder">
-              Estamos preparando una selección de opciones recomendadas. Mientras tanto, puedes volver al comparador o contactar para sugerencias,
-              colaboraciones o recomendaciones.
+              Estamos revisando opciones fiables antes de mostrar recomendaciones. Mientras tanto, puedes volver al comparador o consultar con un
+              profesional si tu caso requiere asesoramiento personalizado.
             </p>
           )}
           <p className="go-note">
