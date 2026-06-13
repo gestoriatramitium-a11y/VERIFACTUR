@@ -713,6 +713,48 @@ summary {
   margin-top: 24px;
 }
 
+.provider-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.provider-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 10px 26px rgba(17, 37, 65, 0.08);
+}
+
+.provider-card h2 {
+  margin: 0;
+  font-size: 1.18rem;
+}
+
+.provider-card p {
+  margin: 0;
+  color: #40536d;
+  line-height: 1.6;
+}
+
+.provider-card .button {
+  width: fit-content;
+}
+
+.pending-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 8px 10px;
+  border: 1px solid #d5deea;
+  border-radius: 8px;
+  background: #f3f6fa;
+  color: #526176;
+  font-weight: 800;
+}
+
 .go-note {
   margin-top: 12px;
   font-size: 0.95rem;

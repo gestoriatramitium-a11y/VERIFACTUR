@@ -1,13 +1,23 @@
 import { comparatorItems } from "../data/resources";
+import { affiliateLinks, type AffiliateLinkKey } from "../data/affiliateLinks";
 
 type GoPageProps = {
   slug: string;
+};
+
+type RecommendedProvider = {
+  key: AffiliateLinkKey;
+  name: string;
+  text: string;
+  button: string;
 };
 
 export default function GoPage({ slug }: GoPageProps) {
   const item = comparatorItems.find((entry) => entry.slug === slug);
   const primaryTarget = getPrimaryTarget(slug);
   const otherOptions = comparatorItems.filter((entry) => entry.slug !== slug);
+  const providers = getRecommendedProviders(slug);
+  const hasRealAffiliateLinks = providers.some((provider) => affiliateLinks[provider.key]);
 
   if (!item) {
     return (
@@ -29,16 +39,40 @@ export default function GoPage({ slug }: GoPageProps) {
           <h1>{item.name}</h1>
           <p className="page-intro">{item.idealFor}</p>
           <div className="route-actions">
-            {/* Sustituir este placeholder por el enlace de afiliado real cuando exista. */}
             <a className="button button-primary" href={primaryTarget}>Ver opciones recomendadas</a>
             <a className="button button-secondary" href="/comparador">Volver al comparador</a>
           </div>
-          <p className="affiliate-placeholder">
-            Estamos preparando una selección de opciones recomendadas. Mientras tanto, puedes volver al comparador o contactar para sugerencias,
-            colaboraciones o recomendaciones.
-          </p>
+          {providers.length ? (
+            <div className="provider-list" aria-label="Opciones recomendadas">
+              {providers.map((provider) => (
+                <article className="provider-card" key={provider.key}>
+                  <h2>{provider.name}</h2>
+                  <p>{provider.text}</p>
+                  {affiliateLinks[provider.key] ? (
+                    <a
+                      className="button button-primary"
+                      href={affiliateLinks[provider.key] ?? "#"}
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                    >
+                      {provider.button}
+                    </a>
+                  ) : (
+                    <span className="pending-badge">Próximamente</span>
+                  )}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="affiliate-placeholder">
+              Estamos preparando una selección de opciones recomendadas. Mientras tanto, puedes volver al comparador o contactar para sugerencias,
+              colaboraciones o recomendaciones.
+            </p>
+          )}
           <p className="go-note">
-            Nota: esta página es informativa. Algunas recomendaciones o enlaces podrán ser de afiliado en el futuro, sin coste adicional para el usuario.
+            {hasRealAffiliateLinks
+              ? "Algunos enlaces de esta página pueden ser enlaces de afiliado o referido. Esto significa que FacturaRadar podría recibir una comisión si contratas o te registras desde ellos, sin coste adicional para ti. Nuestra recomendación tiene carácter orientativo y debes revisar siempre las condiciones oficiales de cada proveedor."
+              : "Nota: esta página es informativa. Algunas recomendaciones o enlaces podrán ser de afiliado en el futuro, sin coste adicional para el usuario."}
           </p>
         </div>
 
@@ -77,4 +111,65 @@ export default function GoPage({ slug }: GoPageProps) {
 function getPrimaryTarget(slug: string) {
   if (slug === "gestoria-online" || slug === "asesoria-tradicional") return "/contacto";
   return "/comparador";
+}
+
+function getRecommendedProviders(slug: string): RecommendedProvider[] {
+  if (slug === "software-economico") {
+    return [
+      {
+        key: "quipu",
+        name: "Quipu",
+        text: "Quipu puede encajar con autónomos y pequeños negocios que buscan una solución sencilla para facturación, presupuestos, gastos y gestión básica.",
+        button: "Ver Quipu"
+      },
+      {
+        key: "contasimple",
+        name: "Contasimple by Cegid",
+        text: "Contasimple puede ser una alternativa para usuarios que buscan una herramienta sencilla para facturación, contabilidad básica y gestión de impuestos.",
+        button: "Ver Contasimple"
+      }
+    ];
+  }
+
+  if (slug === "opcion-basica") {
+    return [
+      {
+        key: "contasimple",
+        name: "Contasimple by Cegid",
+        text: "Contasimple puede ser una alternativa sencilla para empezar con facturación, contabilidad básica y gestión de impuestos.",
+        button: "Ver Contasimple"
+      },
+      {
+        key: "quipu",
+        name: "Quipu",
+        text: "Quipu también puede encajar si buscas una herramienta simple para facturas, presupuestos, gastos y gestión diaria.",
+        button: "Ver Quipu"
+      }
+    ];
+  }
+
+  if (slug === "programa-profesional") {
+    return [
+      {
+        key: "quipu",
+        name: "Quipu",
+        text: "Quipu está disponible como alternativa para negocios que quieren digitalizar facturación y gestión básica antes de valorar soluciones más complejas.",
+        button: "Ver Quipu"
+      },
+      {
+        key: "sage",
+        name: "Sage",
+        text: "Estamos revisando esta opción. El enlace real está pendiente de aprobación.",
+        button: "Pendiente de enlace"
+      },
+      {
+        key: "billin",
+        name: "Billin / TeamSystem Billin",
+        text: "Estamos revisando esta opción. El enlace real está pendiente de aprobación.",
+        button: "Pendiente de enlace"
+      }
+    ];
+  }
+
+  return [];
 }
